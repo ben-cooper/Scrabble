@@ -1,3 +1,7 @@
+/* This code has a mysterious segfault bug that appears only on certain word lists
+and thus, this code has been retired.  Do not use it even if it appears to work
+on your list. */
+
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
