@@ -46,7 +46,10 @@ treapset *initialize(FILE *list) {
 	/*getting words from word list*/
 	while ((fgets(word, 100, list) != NULL)) {
 		word[strlen(word) - 1] = '\0';
-		str = (char *) malloc(strlen(word));
+		if ((str = (char *) malloc(strlen(word))) == NULL) {
+			fprintf(stderr, "Out of memory!\n");
+			exit(1);
+		}
 		strcat(str, word);
 		word_set = treap_insert(word_set, word_hasher(str), str);
 	}
@@ -125,7 +128,11 @@ int main(int argc, char **argv) {
 	}
 
 	if (argc == 1) {
-		list = fopen("/usr/share/dict/words", "r");
+		if ((list = fopen("/usr/share/dict/words", "r")) == NULL) {
+			perror("fopen");
+			fprintf(stderr, "Unix word list not found.  Please give path to word list as argument.\n");
+			exit(1);
+		}
 	} else if ((list = fopen(argv[1], "r")) == NULL) {
 		perror("fopen");
 		exit(1);
