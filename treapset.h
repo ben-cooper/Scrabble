@@ -2,7 +2,7 @@
 #define TREAPSET_H
 
 /*change to fit your program*/
-typedef int TREAPTYPE;
+typedef unsigned long TREAPTYPE;
 
 typedef struct treap {
 	int priority;

@@ -4,13 +4,28 @@
 #include "treapset.h"
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
 #include <stdlib.h>
 
-int word_hasher(char *str) {
+/*list of primes for the hashing function*/
+const int primes[26] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 32, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101};
+
+unsigned long power(int x, int y) {
+	unsigned long result = (unsigned long) x;
+
+	if (y == 0) {
+		return 1;
+	}
+	for (int i=1; i < y; i++) {
+		result *= result;
+	}
+	return result;
+}
+
+
+unsigned long word_hasher(char *str) {
 	/*creating buckets to bucket sort (array of ones)*/
-	int bucket[26] = { 1 };
-	int result = 0;
+	int bucket[26] = { 0 };
+	unsigned long result = 1;
 	unsigned int index;
 	/*filling buckets*/
 	for (index=0; index < strlen(str); index++) {
@@ -23,7 +38,7 @@ int word_hasher(char *str) {
 
 	/*creating hash*/
 	for (index=0; index < 26; index++) {
-		result += bucket[index] * (index+1);
+		result *= power(primes[index], bucket[index]);
 	}
 	return result;
 
