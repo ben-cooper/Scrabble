@@ -124,6 +124,8 @@ void word_searcher(treapset *word_set, char *word) {
 			/*searching for more words with the same hash using middle node*/
 			buffer = buffer->middle;
 		}
+	} else {
+		printf("Not found!\n");
 	}
 }
 

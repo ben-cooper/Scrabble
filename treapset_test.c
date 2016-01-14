@@ -1,6 +1,8 @@
 #include "treapset.h"
 #include <stdio.h>
 
+#define TREAPTYPE int
+
 
 void inorder(treapset *root) {
 	if (root->left != NULL)
