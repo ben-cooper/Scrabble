@@ -24,6 +24,7 @@ to use instead.
 If you don't have a word list handy, you can download dict.txt from the repo.
 
 Examples:
+
 $ ./fullanagram
 Initializing word list...
 Number of words: 128985
