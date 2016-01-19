@@ -24,7 +24,7 @@ to use instead.
 If you don't have a word list handy, you can download dict.txt from the repo.
 
 Examples:
-> ./fullanagram
+$ ./fullanagram
 Initializing word list...
 Number of words: 128985
 Height: 40
@@ -38,7 +38,7 @@ cat
 
 
 
-> ./fullanagram /home/ben/wordlist.txt
+$ ./fullanagram /home/ben/wordlist.txt
 ...
 
 Press Ctrl-D to exit the program.
