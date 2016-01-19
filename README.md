@@ -21,11 +21,26 @@ Otherwise, you can pass the path to a word list in the same format
 (one word on each line in plain text) as an argument for the program
 to use instead.
 
+If you don't have a word list handy, you can download dict.txt from the repo.
+
 Examples:
 > ./fullanagram
-...
+Initializing word list...
+Number of words: 128985
+Height: 40
+Done!
+
+cat
+
+act
+tac
+cat
+
+
 
 > ./fullanagram /home/ben/wordlist.txt
 ...
+
+Press Ctrl-D to exit the program.
 
 Enjoy!
