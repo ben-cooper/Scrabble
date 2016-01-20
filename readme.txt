@@ -39,5 +39,7 @@ $ ./fullanagram /home/ben/wordlist.txt
 ...
 
 
-Press Ctrl-D to exit the program.
+Press Ctrl-D to exit the program on Unix.
+Press Ctrl-Z and Enter to exit the program on Windows.
+
 Enjoy!
