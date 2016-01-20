@@ -12,7 +12,8 @@ void destroy_treap(treapset *root) {
 		destroy_treap(root->right);
 	if (root->middle != NULL)
 		destroy_treap(root->middle);
-
+	
+	free(root->str);
 	free(root);
 }
 
