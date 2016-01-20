@@ -1,6 +1,3 @@
-#ifndef TREAPSET_H
-#define TREAPSET_H
-
 /*change to fit your program*/
 #ifndef TREAPTYPE
 #define TREAPTYPE unsigned long
@@ -29,5 +26,3 @@ extern void treap_to_array_h(treapset *root, TREAPTYPE *array, int *current);
 extern void seed_rand();
 extern void destroy_treap(treapset *root);
 extern int treap_height(treapset *root);
-
-#endif

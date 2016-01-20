@@ -1,6 +1,3 @@
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE
-#endif
 #include "treapset.h"
 #include <stdio.h>
 #include <string.h>
@@ -20,7 +17,6 @@ unsigned long power(int x, int y) {
 	}
 	return result;
 }
-
 
 unsigned long word_hasher(char *str) {
 	/*creating buckets to bucket sort (array of ones)*/
@@ -78,6 +74,7 @@ treapset *initialize(FILE *list) {
 
 
 }
+
 int word_compare(char *str, char *other) {
 	/*creating buckets to bucket sort (array of zeroes)*/
 	int bucket[26] = { 0 };
@@ -129,15 +126,13 @@ void word_searcher(treapset *word_set, char *word) {
 	}
 }
 
-
-
-
 int main(int argc, char **argv) {
 	FILE *list;
 	treapset *word_set;
-	char *input_buffer = NULL;
-	unsigned long len;
-	int read;
+	//char *input_buffer = NULL;
+	char input_buffer[100];
+	//unsigned long len;
+	//int read;
 	
 	if (argc > 2) {
 		fprintf(stderr, "usage: %s [path_to_word_list]\n", argv[0]);
@@ -162,12 +157,13 @@ int main(int argc, char **argv) {
 	printf("Done!\n\n");
 
 	/*user input loop*/
-	while ((read = getline(&input_buffer, &len, stdin)) != -1)  {
-		input_buffer[strlen(input_buffer)-1] = '\0';
+	while (fgets(input_buffer, 100, stdin) != NULL) {
+		input_buffer[strlen(input_buffer) - 1] = '\0';
 		printf("\n");
 		word_searcher(word_set, input_buffer);
 		printf("\n");
 	}
+
 	printf("\nFreeing memory...\n");
 	destroy_treap(word_set);
 	printf("Done!\n");
