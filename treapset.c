@@ -97,22 +97,26 @@ treapset *treap_delete(treapset *root, TREAPTYPE value) {
 			root->middle->left = root->left;
 			root->middle->right = root->right;
 			result = root->middle;
+			free(root->str);
 			free(root);
 			return result;
 		}
 		else if (root->right == NULL) {
 			if (root->left == NULL)  {
 				/*no children*/
+				free(root->str);
 				free(root);
 				return NULL;
 			}
 			/*left child only*/
 			result = root->left;
+			free(root->str);
 			free(root);
 			return result;
 		} else if (root->left == NULL){
 			/*right child only*/
 			result = root->right;
+			free(root->str);
 			free(root);
 			return result;
 		} else {
