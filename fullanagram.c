@@ -129,10 +129,7 @@ void word_searcher(treapset *word_set, char *word) {
 int main(int argc, char **argv) {
 	FILE *list;
 	treapset *word_set;
-	//char *input_buffer = NULL;
 	char input_buffer[100];
-	//unsigned long len;
-	//int read;
 	
 	if (argc > 2) {
 		fprintf(stderr, "usage: %s [path_to_word_list]\n", argv[0]);
