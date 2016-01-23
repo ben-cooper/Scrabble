@@ -56,7 +56,8 @@ treapset *initialize(FILE *list) {
 
 	/*getting words from word list*/
 	while ((fgets(word, 100, list) != NULL)) {
-		word[strlen(word) - 1] = '\0';
+		//word[strlen(word) - 1] = '\0';
+		//fprintf(stderr, "\n%lu\n", strlen(word));
 		if ((str = (char *) malloc(strlen(word))) == NULL) {
 			fprintf(stderr, "Out of memory!\n");
 			exit(1);
@@ -155,7 +156,7 @@ int main(int argc, char **argv) {
 
 	/*user input loop*/
 	while (fgets(input_buffer, 100, stdin) != NULL) {
-		input_buffer[strlen(input_buffer) - 1] = '\0';
+		//input_buffer[strlen(input_buffer) - 1] = '\0';
 		printf("\n");
 		word_searcher(word_set, input_buffer);
 		printf("\n");
