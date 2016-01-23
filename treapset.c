@@ -12,7 +12,7 @@ void destroy_treap(treapset *root) {
 		destroy_treap(root->right);
 	if (root->middle != NULL)
 		destroy_treap(root->middle);
-	
+
 	free(root->str);
 	free(root);
 }
@@ -35,23 +35,29 @@ treapset *treap_lrotate(treapset *root) {
 	return result;
 }
 
+treapset *node_init(treapset *root, TREAPTYPE value, int priority, char *str) {
+	treapset *new_node;
+	if ((new_node = (treapset *) malloc(sizeof(treapset))) == NULL) {
+		fprintf(stderr, "Out of memory!\n");
+		destroy_treap(root);
+		exit(1);
+	}
+	new_node->data = value;
+	new_node->priority = priority;
+	new_node->str = str;
+	new_node->left = NULL;
+	new_node->right = NULL;
+	new_node->middle = NULL;
+
+	return new_node;
+}
+
 treapset *treap_insert_p(treapset *root, TREAPTYPE value, int priority, char *str) {
 	treapset *new_node;
 	treapset *temp;
 	/*base case*/
 	if (root == NULL) {
-		if ((new_node = (treapset *) malloc(sizeof(treapset))) == NULL) {
-			fprintf(stderr, "Out of memory!\n");
-			destroy_treap(root);
-			exit(1);
-		}
-		new_node->data = value;
-		new_node->priority = priority;
-		new_node->str = str;
-		new_node->left = NULL;
-		new_node->right = NULL;
-		new_node->middle = NULL;
-		return new_node;
+		return node_init(root, value, priority, str);
 	} else if (value < root->data) {
 		/*recursive insert into left*/
 		root->left = treap_insert_p(root->left, value, priority, str);
@@ -64,17 +70,7 @@ treapset *treap_insert_p(treapset *root, TREAPTYPE value, int priority, char *st
 			root = treap_lrotate(root);
 	} else {
 		/*elements are equal - insert into middle*/
-		if ((new_node = (treapset *) malloc(sizeof(treapset))) == NULL) {
-			fprintf(stderr, "Out of memory!\n");
-			destroy_treap(root);
-			exit(1);
-		}
-		new_node->data = value;
-		new_node->priority = priority;
-		new_node->str = str;
-		new_node->left = NULL;
-		new_node->right = NULL;
-		new_node->middle = NULL;
+		new_node = node_init(root, value, priority, str);
 		temp = root->middle;
 		root->middle = new_node;
 		new_node->middle = temp;
@@ -207,7 +203,7 @@ TREAPTYPE *treap_to_array(treapset *root) {
 	treap_to_array_h(root, result, counter);
 	return result;
 
-	
+
 }
 
 int treap_height(treapset *root) {
