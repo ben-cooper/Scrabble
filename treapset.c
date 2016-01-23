@@ -48,6 +48,9 @@ treapset *treap_insert_p(treapset *root, TREAPTYPE value, int priority, char *st
 		new_node->data = value;
 		new_node->priority = priority;
 		new_node->str = str;
+		new_node->left = NULL;
+		new_node->right = NULL;
+		new_node->middle = NULL;
 		return new_node;
 	} else if (value < root->data) {
 		/*recursive insert into left*/
@@ -69,6 +72,9 @@ treapset *treap_insert_p(treapset *root, TREAPTYPE value, int priority, char *st
 		new_node->data = value;
 		new_node->priority = priority;
 		new_node->str = str;
+		new_node->left = NULL;
+		new_node->right = NULL;
+		new_node->middle = NULL;
 		temp = root->middle;
 		root->middle = new_node;
 		new_node->middle = temp;

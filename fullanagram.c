@@ -56,13 +56,11 @@ treapset *initialize(FILE *list) {
 
 	/*getting words from word list*/
 	while ((fgets(word, 100, list) != NULL)) {
-		//word[strlen(word) - 1] = '\0';
-		//fprintf(stderr, "\n%lu\n", strlen(word));
-		if ((str = (char *) malloc(strlen(word))) == NULL) {
+		if ((str = (char *) malloc(strlen(word) + 1)) == NULL) {
 			fprintf(stderr, "Out of memory!\n");
 			exit(1);
 		}
-		strcat(str, word);
+		strcpy(str, word);
 		word_set = treap_insert(word_set, word_hasher(str), str);
 	}
 
@@ -118,7 +116,7 @@ void word_searcher(treapset *word_set, char *word) {
 		while (buffer != NULL) {
 			/*seeing if words are actually anagrams of each other*/
 			if (word_compare(buffer->str, word) == 1)
-				printf("%s\n", buffer->str);
+				printf("%s", buffer->str);
 			/*searching for more words with the same hash using middle node*/
 			buffer = buffer->middle;
 		}
