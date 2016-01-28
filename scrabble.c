@@ -13,7 +13,7 @@ unsigned long power(int x, int y) {
 		return 1;
 	}
 	for (int i=1; i < y; i++) {
-		result *= result;
+		result *= x;
 	}
 	return result;
 }
@@ -78,7 +78,7 @@ int word_compare(char *str, char *other) {
 	/*creating buckets to bucket sort (array of zeroes)*/
 	int bucket[26] = { 0 };
 	int other_bucket[26] = { 0 };
-	
+
 	unsigned int index;
 
 	/*the buckets keep track of the number of each letter in each string*/
@@ -120,16 +120,59 @@ void word_searcher(treapset *word_set, char *word) {
 			/*searching for more words with the same hash using middle node*/
 			buffer = buffer->middle;
 		}
-	} else {
-		printf("Not found!\n");
 	}
+}
+
+char *word_subset(char *letters, int *combination) {
+	int length = strlen(letters);
+	char *result = (char *) malloc(sizeof(int) * length+1);
+	int current = 0;
+	for (int i=0; i < length; i++)  {
+		if (combination[i] == 1) {
+			result[current] = letters[i];
+			current++;
+		}
+	}
+	result[current] = '\0';
+	return result;
+}
+
+void decrement(int *combination, int length) {
+	for (int i=length-1; i >= 0; i--) {
+		if (combination[i] == 0) {
+			combination[i] = 1;
+		} else {
+			combination[i] = 0;
+			i = -1;
+		}
+	}
+}
+
+void scrabbler(treapset *word_set, char *letters) {
+	int length = strlen(letters) -1;
+	int *combination = (int *) malloc(length * sizeof(int));
+	for (int i=0; i < length; i++)
+		combination[i] = 1;
+
+	int number_combinations = (int) power(2, length) - 1;
+	char *word;
+	for (int i=0; i < number_combinations; i++) {
+		word = word_subset(letters, combination);
+		word_searcher(word_set, word);
+		free(word);
+		decrement(combination, length);
+	}
+	free(combination);
+
 }
 
 int main(int argc, char **argv) {
 	FILE *list;
 	treapset *word_set;
 	char input_buffer[100];
-	
+
+	//printf("\n%d\n", (int) power(2, 4));
+
 	if (argc > 2) {
 		fprintf(stderr, "usage: %s [path_to_word_list]\n", argv[0]);
 		exit(1);
@@ -156,7 +199,7 @@ int main(int argc, char **argv) {
 	while (fgets(input_buffer, 100, stdin) != NULL) {
 		//input_buffer[strlen(input_buffer) - 1] = '\0';
 		printf("\n");
-		word_searcher(word_set, input_buffer);
+		scrabbler(word_set, input_buffer);
 		printf("\n");
 	}
 
