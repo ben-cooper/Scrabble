@@ -6,6 +6,15 @@
 /*list of primes for the hashing function*/
 const int primes[26] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 32, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101};
 
+void *emalloc(size_t bytes) {
+	void *result;
+	if ((result = malloc(bytes)) == NULL) {
+		fprintf(stderr, "Out of memory!\n");
+		exit(1);
+	}
+	return result;
+}
+
 unsigned long power(int x, int y) {
 	unsigned long result = (unsigned long) x;
 
@@ -56,10 +65,7 @@ treapset *initialize(FILE *list) {
 
 	/*getting words from word list*/
 	while ((fgets(word, 100, list) != NULL)) {
-		if ((str = (char *) malloc(strlen(word) + 1)) == NULL) {
-			fprintf(stderr, "Out of memory!\n");
-			exit(1);
-		}
+		str = (char *) emalloc(strlen(word) + 1);
 		strcpy(str, word);
 		word_set = treap_insert(word_set, word_hasher(str), str);
 	}
@@ -125,7 +131,7 @@ void word_searcher(treapset *word_set, char *word) {
 
 char *word_subset(char *letters, int *combination) {
 	int length = strlen(letters) - 1;
-	char *result = (char *) malloc(sizeof(int) * length+1);
+	char *result = (char *) emalloc(sizeof(int) * length+1);
 	int current = 0;
 	for (int i=0; i < length; i++)  {
 		if (combination[i] == 1) {
@@ -150,7 +156,7 @@ void decrement(int *combination, int length) {
 
 void scrabbler(treapset *word_set, char *letters) {
 	int length = strlen(letters) -1;
-	int *combination = (int *) malloc(length * sizeof(int));
+	int *combination = (int *) emalloc(length * sizeof(int));
 	for (int i=0; i < length; i++)
 		combination[i] = 1;
 
@@ -170,8 +176,6 @@ int main(int argc, char **argv) {
 	FILE *list;
 	treapset *word_set;
 	char input_buffer[100];
-
-	//printf("\n%d\n", (int) power(2, 4));
 
 	if (argc > 2) {
 		fprintf(stderr, "usage: %s [path_to_word_list]\n", argv[0]);
