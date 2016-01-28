@@ -124,7 +124,7 @@ void word_searcher(treapset *word_set, char *word) {
 }
 
 char *word_subset(char *letters, int *combination) {
-	int length = strlen(letters);
+	int length = strlen(letters) - 1;
 	char *result = (char *) malloc(sizeof(int) * length+1);
 	int current = 0;
 	for (int i=0; i < length; i++)  {
