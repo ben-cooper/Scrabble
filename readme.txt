@@ -1,11 +1,12 @@
-Anagram Finder Written in C for Unix-like systems.
+Scrabble Word Finder
+(Written in C for Unix-like systems.)
 (Will work on Windows as well.)
 
-This program finds anagrams for English words.
+This program finds words you could make out of a subset of given letters, for English words.
 To compile this program.  You must download:
 -treapset.c
 -treapset.h
--fullanagram.c
+-scrabble.c
 -Makefile
 
 And then run the Makefile with the command 'make'.
@@ -21,7 +22,7 @@ to use instead.
 If you don't have a word list handy, you can download dict.txt from the repo.
 
 Examples:
-$ ./fullanagram
+$ ./scrabble
 Initializing word list...
 Number of words: 128985
 Height: 40
@@ -32,10 +33,13 @@ cat
 act
 tac
 cat
+at
+ca
+a
 
 
 
-$ ./fullanagram /home/ben/wordlist.txt
+$ ./scrabble /home/ben/wordlist.txt
 ...
 
 
