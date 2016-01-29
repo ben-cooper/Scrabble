@@ -155,7 +155,7 @@ void decrement(int *combination, int length) {
 }
 
 void scrabbler(treapset *word_set, char *letters) {
-	int length = strlen(letters) -1;
+	int length = strlen(letters) - 1;
 	int *combination = (int *) emalloc(length * sizeof(int));
 	for (int i=0; i < length; i++)
 		combination[i] = 1;
@@ -170,6 +170,20 @@ void scrabbler(treapset *word_set, char *letters) {
 	}
 	free(combination);
 
+}
+
+char *sanitizer(char *word) {
+	int length = strlen(word);
+	char *result = (char *) emalloc(length);
+	memset(result, 0, sizeof(char)*length);
+	for (int i=0; i < length; i++) {
+		if ((word[i] <= 122) && (word[i] >= 97)) {
+			result[i] = word[i];
+		} else if ((word[i] <= 90) && (word[i] >= 65)) {
+			result[i] = word[i];
+		}
+	}
+	return result;
 }
 
 int main(int argc, char **argv) {
@@ -201,9 +215,10 @@ int main(int argc, char **argv) {
 
 	/*user input loop*/
 	while (fgets(input_buffer, 100, stdin) != NULL) {
-		//input_buffer[strlen(input_buffer) - 1] = '\0';
 		printf("\n");
-		scrabbler(word_set, input_buffer);
+		char *word = sanitizer(input_buffer);
+		scrabbler(word_set, word);
+		free(word);
 		printf("\n");
 	}
 
