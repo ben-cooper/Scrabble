@@ -223,4 +223,14 @@ int treap_height(treapset *root) {
 	}
 }
 
+void sort_words(treapset *root) {
+	if (root->left != NULL) 
+		sort_words(root->left);
+	printf("%s\n", root->str);
+	if (root->right != NULL)
+		sort_words(root->right);
+}
+
+
+
 

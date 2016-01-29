@@ -5,6 +5,7 @@
 
 /*list of primes for the hashing function*/
 const int primes[26] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 32, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101};
+treapset *output = NULL;
 
 void *emalloc(size_t bytes) {
 	void *result;
@@ -122,7 +123,8 @@ void word_searcher(treapset *word_set, char *word) {
 		while (buffer != NULL) {
 			/*seeing if words are actually anagrams of each other*/
 			if (word_compare(buffer->str, word) == 1)
-				printf("%s", buffer->str);
+				//printf("%s", buffer->str);
+				treap_insert(output, strlen(buffer->str), buffer->str);
 			/*searching for more words with the same hash using middle node*/
 			buffer = buffer->middle;
 		}
@@ -165,9 +167,11 @@ void scrabbler(treapset *word_set, char *letters) {
 	for (int i=0; i < number_combinations; i++) {
 		word = word_subset(letters, combination);
 		word_searcher(word_set, word);
-		free(word);
 		decrement(combination, length);
 	}
+	sort_words(output);
+	destroy_treap(output);
+	output = NULL;
 	free(combination);
 
 }
