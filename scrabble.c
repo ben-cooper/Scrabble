@@ -170,8 +170,8 @@ void scrabbler(treapset *word_set, char *letters) {
 	char *word;
 	for (int i=0; i < number_combinations; i++) {
 		word = word_subset(letters, combination);
-		if (word_searcher(word_set, word) == 0)
-			free(word);
+		word_searcher(word_set, word);
+		free(word);
 		decrement(combination, length);
 	}
 	sort_words(output);
