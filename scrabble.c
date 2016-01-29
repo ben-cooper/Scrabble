@@ -130,7 +130,7 @@ void word_searcher(treapset *word_set, char *word) {
 }
 
 char *word_subset(char *letters, int *combination) {
-	int length = strlen(letters) - 1;
+	int length = strlen(letters);
 	char *result = (char *) emalloc(sizeof(int) * length+1);
 	int current = 0;
 	for (int i=0; i < length; i++)  {
@@ -155,7 +155,7 @@ void decrement(int *combination, int length) {
 }
 
 void scrabbler(treapset *word_set, char *letters) {
-	int length = strlen(letters) - 1;
+	int length = strlen(letters);
 	int *combination = (int *) emalloc(length * sizeof(int));
 	for (int i=0; i < length; i++)
 		combination[i] = 1;
@@ -174,15 +174,20 @@ void scrabbler(treapset *word_set, char *letters) {
 
 char *sanitizer(char *word) {
 	int length = strlen(word);
+	int current = 0;
 	char *result = (char *) emalloc(length);
-	memset(result, 0, sizeof(char)*length);
-	for (int i=0; i < length; i++) {
+	//memset(result, 0, sizeof(char)*length);
+
+	for (int i=0; i < length - 1; i++) {
 		if ((word[i] <= 122) && (word[i] >= 97)) {
-			result[i] = word[i];
+			result[current] = word[i];
+			current++;
 		} else if ((word[i] <= 90) && (word[i] >= 65)) {
-			result[i] = word[i];
+			result[current] = word[i];
+			current++;
 		}
 	}
+	result[current] = '\0';
 	return result;
 }
 
