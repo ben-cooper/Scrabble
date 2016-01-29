@@ -176,7 +176,6 @@ char *sanitizer(char *word) {
 	int length = strlen(word);
 	int current = 0;
 	char *result = (char *) emalloc(length);
-	//memset(result, 0, sizeof(char)*length);
 
 	for (int i=0; i < length - 1; i++) {
 		if ((word[i] <= 122) && (word[i] >= 97)) {
