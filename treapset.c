@@ -3,17 +3,18 @@
 #include "treapset.h"
 #include <time.h>
 
-void destroy_treap(treapset *root) {
+void destroy_treap(treapset *root, int freewords) {
 	/*recursively destroying treap*/
 
 	if (root->left != NULL)
-		destroy_treap(root->left);
+		destroy_treap(root->left, freewords);
 	if (root->right != NULL)
-		destroy_treap(root->right);
+		destroy_treap(root->right, freewords);
 	if (root->middle != NULL)
-		destroy_treap(root->middle);
+		destroy_treap(root->middle, freewords);
 
-	free(root->str);
+	if (freewords == 1)
+		free(root->str);
 	free(root);
 }
 
@@ -39,7 +40,7 @@ treapset *node_init(treapset *root, TREAPTYPE value, int priority, char *str) {
 	treapset *new_node;
 	if ((new_node = (treapset *) malloc(sizeof(treapset))) == NULL) {
 		fprintf(stderr, "Out of memory!\n");
-		destroy_treap(root);
+		destroy_treap(root, 1);
 		exit(1);
 	}
 	new_node->data = value;
@@ -196,7 +197,7 @@ TREAPTYPE *treap_to_array(treapset *root) {
 	/*calculating length of treap*/
 	if ((result = (TREAPTYPE *) malloc(treap_length(root) * sizeof(TREAPTYPE))) == NULL) {
 		fprintf(stderr, "Out of memory!\n");
-		destroy_treap(root);
+		destroy_treap(root, 1);
 		exit(1);
 	}
 
@@ -224,11 +225,18 @@ int treap_height(treapset *root) {
 }
 
 void sort_words(treapset *root) {
-	if (root->left != NULL) 
-		sort_words(root->left);
-	printf("%s\n", root->str);
 	if (root->right != NULL)
 		sort_words(root->right);
+
+	printf("%s", root->str);
+
+	if (root->middle != NULL)
+		sort_words(root->middle);
+
+	if (root->left != NULL) 
+		sort_words(root->left);
+
+
 }
 
 

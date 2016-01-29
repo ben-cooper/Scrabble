@@ -25,6 +25,6 @@ extern int treap_length(treapset *root);
 extern TREAPTYPE *treap_to_array(treapset *root);
 extern void treap_to_array_h(treapset *root, TREAPTYPE *array, int *current);
 extern void seed_rand();
-extern void destroy_treap(treapset *root);
+extern void destroy_treap(treapset *root, int freewords);
 extern int treap_height(treapset *root);
 extern void sort_words(treapset *root);

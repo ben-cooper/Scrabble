@@ -114,21 +114,25 @@ int word_compare(char *str, char *other) {
 
 }
 
-void word_searcher(treapset *word_set, char *word) {
+int word_searcher(treapset *word_set, char *word) {
 
 	treapset *buffer;
+	int result = 0;
 
 	/*finding word with the same hashes*/
 	if ((buffer = treap_find(word_set, word_hasher(word))) != NULL) {
 		while (buffer != NULL) {
 			/*seeing if words are actually anagrams of each other*/
-			if (word_compare(buffer->str, word) == 1)
-				//printf("%s", buffer->str);
-				treap_insert(output, strlen(buffer->str), buffer->str);
+			if (word_compare(buffer->str, word) == 1) {
+				output = treap_insert(output, strlen(buffer->str), buffer->str);
+				result = 1;
+			}
 			/*searching for more words with the same hash using middle node*/
 			buffer = buffer->middle;
 		}
 	}
+
+	return result;
 }
 
 char *word_subset(char *letters, int *combination) {
@@ -166,11 +170,12 @@ void scrabbler(treapset *word_set, char *letters) {
 	char *word;
 	for (int i=0; i < number_combinations; i++) {
 		word = word_subset(letters, combination);
-		word_searcher(word_set, word);
+		if (word_searcher(word_set, word) == 0)
+			free(word);
 		decrement(combination, length);
 	}
 	sort_words(output);
-	destroy_treap(output);
+	destroy_treap(output, 0);
 	output = NULL;
 	free(combination);
 
@@ -231,7 +236,7 @@ int main(int argc, char **argv) {
 	}
 
 	printf("\nFreeing memory...\n");
-	destroy_treap(word_set);
+	destroy_treap(word_set, 1);
 	printf("Done!\n");
 	return 0;
 }
