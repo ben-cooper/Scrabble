@@ -5,6 +5,8 @@
 
 void destroy_treap(treapset *root, int freewords) {
 	/*recursively destroying treap*/
+	if (root == NULL)
+		return;
 
 	if (root->left != NULL)
 		destroy_treap(root->left, freewords);
@@ -225,6 +227,9 @@ int treap_height(treapset *root) {
 }
 
 void sort_words(treapset *root) {
+	if (root == NULL)
+		return;
+
 	if (root->left != NULL) 
 		sort_words(root->left);
 		
