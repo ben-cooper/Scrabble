@@ -27,6 +27,44 @@ void fill_buckets(char *str, int *bucket) {
 	}
 }
 
+int *create_combo_array(char *str) {
+	int bucket[26] = { 0 };
+	int *result;
+	unsigned int length = 0;
+	unsigned int next = 0;
+	unsigned int index;
+
+	fill_buckets(str, bucket);
+
+	/* counting filled buckets */
+	for (index=0; index < 26; index++) {
+		if (bucket[index] != 0)
+			length += 1;
+	}
+
+	/* creating resulting combo array */
+	result = (int *) emalloc(length * sizeof(int));
+
+	for (index=0; index < 26; index++) {
+		if (bucket[index] != 0) {
+			result[next] = bucket[index];
+			next += 1;
+		}
+	}
+
+	/* debugging purposes */
+	for (index=0; index < length; index++) {
+		printf("%d", result[index]);
+	}
+	printf("\n");
+	/* end debugging */
+
+	/*free(result);*/
+
+	return result;
+
+}
+
 
 unsigned long power(int x, int y) {
 	unsigned long result = (unsigned long) x;
@@ -156,6 +194,7 @@ void decrement(int *combination, int length) {
 }
 
 void scrabbler(treapset *word_set, char *letters) {
+	create_combo_array(letters);
 	int length = strlen(letters);
 	int *combination = (int *) emalloc(length * sizeof(int));
 	for (int i=0; i < length; i++)
