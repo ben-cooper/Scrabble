@@ -16,6 +16,18 @@ void *emalloc(size_t bytes) {
 	return result;
 }
 
+void fill_buckets(char *str, int *bucket) {
+	unsigned int index;
+	for (index=0; index < strlen(str); index++) {
+		if ((str[index] >= 97) && (str[index] <= 122))
+			bucket[str[index] - 97] += 1;
+
+		if ((str[index] >= 65) && (str[index] <= 90))
+			bucket[str[index] - 65] += 1;
+	}
+}
+
+
 unsigned long power(int x, int y) {
 	unsigned long result = (unsigned long) x;
 
@@ -34,13 +46,7 @@ unsigned long word_hasher(char *str) {
 	unsigned long result = 1;
 	unsigned int index;
 	/*filling buckets*/
-	for (index=0; index < strlen(str); index++) {
-		if ((str[index] >= 97) && (str[index] <= 122))
-			bucket[str[index] - 97] += 1;
-
-		if ((str[index] >= 65) && (str[index] <= 90))
-			bucket[str[index] - 65] += 1;
-	}
+	fill_buckets(str, bucket);
 
 	/*creating hash*/
 	for (index=0; index < 26; index++) {
@@ -89,20 +95,9 @@ int word_compare(char *str, char *other) {
 	unsigned int index;
 
 	/*the buckets keep track of the number of each letter in each string*/
-	for (index=0; index < strlen(str); index++) {
-		if ((str[index] >= 97) && (str[index] <= 122))
-			bucket[str[index] - 97] += 1;
-
-		if ((str[index] >= 65) && (str[index] <= 90))
-			bucket[str[index] - 65] += 1;
-	}
-	for (index=0; index < strlen(other); index++) {
-		if ((other[index] >= 97) && (other[index] <= 122))
-			other_bucket[other[index] - 97] += 1;
-
-		if ((other[index] >= 65) && (other[index] <= 90))
-			other_bucket[other[index] - 65] += 1;
-	}
+	
+	fill_buckets(str, bucket);
+	fill_buckets(other, other_bucket);
 
 	/*comparing buckets*/
 	for (index=0; index < 26; index++) {
