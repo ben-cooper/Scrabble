@@ -4,7 +4,9 @@
 #include <stdlib.h>
 
 /*list of primes for the hashing function*/
-const int primes[26] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 32, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101};
+const int primes[26] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 32, 37, 41, 43,
+			47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101};
+
 treapset *output = NULL;
 
 void *emalloc(size_t bytes) {
@@ -160,12 +162,16 @@ int word_searcher(treapset *word_set, char *word) {
 	/*finding word with the same hashes*/
 	if ((buffer = treap_find(word_set, word_hasher(word))) != NULL) {
 		while (buffer != NULL) {
-			/*seeing if words are actually anagrams of each other*/
+			/*seeing if words are actually anagrams of each 
+			 * other*/
 			if (word_compare(buffer->str, word) == 1) {
-				output = treap_insert(output, strlen(buffer->str), buffer->str);
+				output = treap_insert(output, 
+						strlen(buffer->str),
+						buffer->str);
 				result = 1;
 			}
-			/*searching for more words with the same hash using middle node*/
+			/*searching for more words with the same hash using 
+			 * middle node*/
 			buffer = buffer->middle;
 		}
 	}
@@ -272,7 +278,8 @@ int main(int argc, char **argv) {
 	if (argc == 1) {
 		if ((list = fopen("/usr/share/dict/words", "r")) == NULL) {
 			perror("fopen");
-			fprintf(stderr, "Unix word list not found.  Please give path to word list as argument.\n");
+			fprintf(stderr, "Unix word list not found.  Please \
+				give path to word list as argument.\n");
 			exit(1);
 		}
 	} else if ((list = fopen(argv[1], "r")) == NULL) {

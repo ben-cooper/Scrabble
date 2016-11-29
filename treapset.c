@@ -55,9 +55,12 @@ treapset *node_init(treapset *root, TREAPTYPE value, int priority, char *str) {
 	return new_node;
 }
 
-treapset *treap_insert_p(treapset *root, TREAPTYPE value, int priority, char *str) {
+treapset *treap_insert_p(treapset *root, TREAPTYPE value, int priority,
+			char *str) {
+
 	treapset *new_node;
 	treapset *temp;
+
 	/*base case*/
 	if (root == NULL) {
 		return node_init(root, value, priority, str);
@@ -68,7 +71,8 @@ treapset *treap_insert_p(treapset *root, TREAPTYPE value, int priority, char *st
 			root = treap_rrotate(root);
 	} else if (value > root->data) {
 		/*recursive insert into right*/
-		root->right = treap_insert_p(root->right, value, priority, str);
+		root->right = treap_insert_p(root->right, value, priority,
+					str);
 		if (root->priority > root->right->priority)
 			root = treap_lrotate(root);
 	} else {
@@ -98,7 +102,8 @@ treapset *treap_delete(treapset *root, TREAPTYPE value) {
 		return NULL;
 	if (root->data == value) {
 		if (root->middle != NULL) {
-			/*there is a middle child which will replace the deleted node*/
+			/*there is a middle child which will replace the 
+			 * deleted node*/
 			root->middle->left = root->left;
 			root->middle->right = root->right;
 			result = root->middle;
@@ -129,7 +134,8 @@ treapset *treap_delete(treapset *root, TREAPTYPE value) {
 			/*bubbling down with lower priority child until leaf*/
 			if (root->left->priority <= root->right->priority) {
 				root = treap_rrotate(root);
-				root->right = treap_delete(root->right, value);
+				root->right = treap_delete(root->right,
+							value);
 			} else {
 				root = treap_lrotate(root);
 				root->left = treap_delete(root->left, value);
@@ -197,7 +203,8 @@ TREAPTYPE *treap_to_array(treapset *root) {
 	int count = 0;
 	int *counter = &count;
 	/*calculating length of treap*/
-	if ((result = (TREAPTYPE *) malloc(treap_length(root) * sizeof(TREAPTYPE))) == NULL) {
+	if ((result = (TREAPTYPE *) malloc(treap_length(root) * 
+					sizeof(TREAPTYPE))) == NULL) {
 		fprintf(stderr, "Out of memory!\n");
 		destroy_treap(root, 1);
 		exit(1);
