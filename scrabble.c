@@ -197,12 +197,12 @@ char *word_subset(char *letters, int *combination) {
 	return result;
 }
 
-int decrement(int *combination, int length) {
+int decrement(int *combination, int length, int *resetter) {
 	int i;
 	int ret=1;
 	for (i=length-1; i >= 0; i--) {
 		if (combination[i] == 0) {
-			combination[i] = 1;
+			combination[i] = resetter[i];
 		} else {
 			combination[i] -= 1;
 			ret = 0;
@@ -215,21 +215,29 @@ int decrement(int *combination, int length) {
 void scrabbler(treapset *word_set, char *letters) {
 	int length;
 	int *combination;
+	int *resetter;
 	int stop=0;
 
 	combination = create_combo_array(letters, &length);
+	resetter = (int *) emalloc(sizeof(int) * length);
 
+	/* copying array combinations max values */
+	for (int i=0; i < length; i++) {
+		resetter[i] = combination[i];
+	}
+	
 	char *word;
 	while (stop == 0) {
 		word = word_subset(letters, combination);
 		word_searcher(word_set, word);
 		free(word);
-		stop = decrement(combination, length);
+		stop = decrement(combination, length, resetter);
 	}
 	sort_words(output);
 	destroy_treap(output, 0);
 	output = NULL;
 	free(combination);
+	free(resetter);
 
 }
 
