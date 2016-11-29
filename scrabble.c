@@ -27,7 +27,7 @@ void fill_buckets(char *str, int *bucket) {
 	}
 }
 
-int *create_combo_array(char *str) {
+int *create_combo_array(char *str, int *unique) {
 	int bucket[26] = { 0 };
 	int *result;
 	unsigned int length = 0;
@@ -42,9 +42,20 @@ int *create_combo_array(char *str) {
 			length += 1;
 	}
 
+	/* removing duplicate letters from input */
+	for (index=0; index < 26; index++) {
+		if (bucket[index] != 0) {
+			str[next] = index + 97;
+			next += 1;
+		}
+	}
+	str[next] = '\0';
+
+
 	/* creating resulting combo array */
 	result = (int *) emalloc(length * sizeof(int));
 
+	next = 0;
 	for (index=0; index < 26; index++) {
 		if (bucket[index] != 0) {
 			result[next] = bucket[index];
@@ -52,14 +63,8 @@ int *create_combo_array(char *str) {
 		}
 	}
 
-	/* debugging purposes */
-	for (index=0; index < length; index++) {
-		printf("%d", result[index]);
-	}
-	printf("\n");
-	/* end debugging */
-
-	/*free(result);*/
+	/* unique will be the length of result */
+	*unique = length;
 
 	return result;
 
@@ -169,11 +174,21 @@ int word_searcher(treapset *word_set, char *word) {
 }
 
 char *word_subset(char *letters, int *combination) {
-	int length = strlen(letters);
-	char *result = (char *) emalloc(sizeof(int) * length+1);
+	unsigned int length = 0;
+	unsigned int i;
 	int current = 0;
-	for (int i=0; i < length; i++)  {
-		if (combination[i] == 1) {
+	char *result;
+
+	/* calculating length */
+	for (i=0; i < strlen(letters); i++) {
+		length += combination[i];
+	}
+
+	result = (char *) emalloc(sizeof(int) * length+1);
+
+
+	for (i=0; i < strlen(letters); i++)  {
+		for (int j=0; j < combination[i]; j++) {
 			result[current] = letters[i];
 			current++;
 		}
@@ -182,31 +197,34 @@ char *word_subset(char *letters, int *combination) {
 	return result;
 }
 
-void decrement(int *combination, int length) {
-	for (int i=length-1; i >= 0; i--) {
+int decrement(int *combination, int length) {
+	int i;
+	int ret=1;
+	for (i=length-1; i >= 0; i--) {
 		if (combination[i] == 0) {
 			combination[i] = 1;
 		} else {
-			combination[i] = 0;
+			combination[i] -= 1;
+			ret = 0;
 			i = -1;
 		}
 	}
+	return ret;
 }
 
 void scrabbler(treapset *word_set, char *letters) {
-	create_combo_array(letters);
-	int length = strlen(letters);
-	int *combination = (int *) emalloc(length * sizeof(int));
-	for (int i=0; i < length; i++)
-		combination[i] = 1;
+	int length;
+	int *combination;
+	int stop=0;
 
-	int number_combinations = (int) power(2, length) - 1;
+	combination = create_combo_array(letters, &length);
+
 	char *word;
-	for (int i=0; i < number_combinations; i++) {
+	while (stop == 0) {
 		word = word_subset(letters, combination);
 		word_searcher(word_set, word);
 		free(word);
-		decrement(combination, length);
+		stop = decrement(combination, length);
 	}
 	sort_words(output);
 	destroy_treap(output, 0);
