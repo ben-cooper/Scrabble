@@ -131,6 +131,12 @@ treapset *initialize(FILE *list) {
 		word_set = treap_insert(word_set, word_hasher(str), str);
 	}
 
+	/* if empty file */
+	if (word_set == NULL) {
+		fprintf(stderr, "Initialization failed! Empty File.\n");
+		exit(1);
+	}
+
 	printf("Number of words: %d\n", treap_length(word_set));
 
 	printf("Height: %d\n", treap_height(word_set));
