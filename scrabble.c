@@ -9,6 +9,13 @@ const int primes[26] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 32, 37, 41, 43,
 
 treapset *output = NULL;
 
+struct combo {
+	int *combo;
+	int *reset;
+	char *str;
+	int length;
+};
+
 void *emalloc(size_t bytes) {
 	void *result;
 	if ((result = malloc(bytes)) == NULL) {
@@ -29,20 +36,17 @@ void fill_buckets(char *str, int *bucket) {
 	}
 }
 
-int *create_combo_array(char *str, int *unique) {
+struct combo *create_combo_array(char *letters) {
 	int bucket[26] = { 0 };
-	int *result;
-	unsigned int length = 0;
+	int *combo;
+	int *reset;
+	struct combo *result = (struct combo *) emalloc(sizeof(struct combo));
 	unsigned int next = 0;
 	unsigned int index;
+	char *str = (char *) emalloc(strlen(letters) + 1);
+	strcpy(str, letters);
 
 	fill_buckets(str, bucket);
-
-	/* counting filled buckets */
-	for (index=0; index < 26; index++) {
-		if (bucket[index] != 0)
-			length += 1;
-	}
 
 	/* removing duplicate letters from input */
 	for (index=0; index < 26; index++) {
@@ -55,18 +59,23 @@ int *create_combo_array(char *str, int *unique) {
 
 
 	/* creating resulting combo array */
-	result = (int *) emalloc(length * sizeof(int));
+	combo = (int *) emalloc(next * sizeof(int));
+	reset = (int *) emalloc(next * sizeof(int));
+
 
 	next = 0;
 	for (index=0; index < 26; index++) {
 		if (bucket[index] != 0) {
-			result[next] = bucket[index];
+			combo[next] = bucket[index];
+			reset[next] = bucket[index];
 			next += 1;
 		}
 	}
 
-	/* unique will be the length of result */
-	*unique = length;
+	result->combo = combo;
+	result->reset = reset;
+	result->length = next;
+	result->str = str;
 
 	return result;
 
@@ -90,7 +99,7 @@ unsigned long word_hasher(char *str) {
 	int bucket[26] = { 0 };
 	unsigned long result = 1;
 	unsigned int index;
-	/*filling buckets*/
+
 	fill_buckets(str, bucket);
 
 	/*creating hash*/
@@ -179,23 +188,17 @@ int word_searcher(treapset *word_set, char *word) {
 	return result;
 }
 
-char *word_subset(char *letters, int *combination) {
-	unsigned int length = 0;
-	unsigned int i;
+char *word_subset(struct combo *combination) {
+	int i;
 	int current = 0;
 	char *result;
 
-	/* calculating length */
-	for (i=0; i < strlen(letters); i++) {
-		length += combination[i];
-	}
-
-	result = (char *) emalloc(sizeof(int) * length+1);
+	result = (char *) emalloc(sizeof(int) * combination->length+1);
 
 
-	for (i=0; i < strlen(letters); i++)  {
-		for (int j=0; j < combination[i]; j++) {
-			result[current] = letters[i];
+	for (i=0; i < combination->length; i++)  {
+		for (int j=0; j < combination->combo[i]; j++) {
+			result[current] = combination->str[i];
 			current++;
 		}
 	}
@@ -203,14 +206,14 @@ char *word_subset(char *letters, int *combination) {
 	return result;
 }
 
-int decrement(int *combination, int length, int *resetter) {
+int decrement(struct combo *combination) {
 	int i;
 	int ret=1;
-	for (i=length-1; i >= 0; i--) {
-		if (combination[i] == 0) {
-			combination[i] = resetter[i];
+	for (i=combination->length-1; i >= 0; i--) {
+		if (combination->combo[i] == 0) {
+			combination->combo[i] = combination->reset[i];
 		} else {
-			combination[i] -= 1;
+			combination->combo[i] -= 1;
 			ret = 0;
 			i = -1;
 		}
@@ -219,31 +222,26 @@ int decrement(int *combination, int length, int *resetter) {
 }
 
 void scrabbler(treapset *word_set, char *letters) {
-	int length;
-	int *combination;
-	int *resetter;
+	struct combo *combination;
 	int stop=0;
 
-	combination = create_combo_array(letters, &length);
-	resetter = (int *) emalloc(sizeof(int) * length);
+	combination = create_combo_array(letters);
 
-	/* copying array combinations max values */
-	for (int i=0; i < length; i++) {
-		resetter[i] = combination[i];
-	}
-	
 	char *word;
 	while (stop == 0) {
-		word = word_subset(letters, combination);
+		word = word_subset(combination);
 		word_searcher(word_set, word);
 		free(word);
-		stop = decrement(combination, length, resetter);
+		stop = decrement(combination);
 	}
+
+	free(combination->combo);
+	free(combination->reset);
+	free(combination->str);
+	free(combination);
 	sort_words(output);
 	destroy_treap(output, 0);
 	output = NULL;
-	free(combination);
-	free(resetter);
 
 }
 
