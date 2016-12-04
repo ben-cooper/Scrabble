@@ -84,11 +84,12 @@ struct combo *create_combo_array(char *letters) {
 
 unsigned long power(int x, int y) {
 	unsigned long result = (unsigned long) x;
+	int i;
 
 	if (y == 0) {
 		return 1;
 	}
-	for (int i=1; i < y; i++) {
+	for (i=1; i < y; i++) {
 		result *= x;
 	}
 	return result;
@@ -196,6 +197,7 @@ int word_searcher(treapset *word_set, char *word) {
 
 char *word_subset(struct combo *combination) {
 	int i;
+	int j;
 	int current = 0;
 	char *result;
 
@@ -203,7 +205,7 @@ char *word_subset(struct combo *combination) {
 
 
 	for (i=0; i < combination->length; i++)  {
-		for (int j=0; j < combination->combo[i]; j++) {
+		for (j=0; j < combination->combo[i]; j++) {
 			result[current] = combination->str[i];
 			current++;
 		}
@@ -230,10 +232,10 @@ int decrement(struct combo *combination) {
 void scrabbler(treapset *word_set, char *letters) {
 	struct combo *combination;
 	int stop=0;
+	char *word;
 
 	combination = create_combo_array(letters);
 
-	char *word;
 	while (stop == 0) {
 		word = word_subset(combination);
 		word_searcher(word_set, word);
@@ -254,9 +256,10 @@ void scrabbler(treapset *word_set, char *letters) {
 char *sanitizer(char *word) {
 	int length = strlen(word);
 	int current = 0;
+	int i;
 	char *result = (char *) emalloc(length);
 
-	for (int i=0; i < length - 1; i++) {
+	for (i=0; i < length - 1; i++) {
 		if ((word[i] <= 122) && (word[i] >= 97)) {
 			result[current] = word[i];
 			current++;
@@ -273,6 +276,7 @@ int main(int argc, char **argv) {
 	FILE *list;
 	treapset *word_set;
 	char input_buffer[100];
+	char *word;
 
 	if (argc > 2) {
 		fprintf(stderr, "usage: %s [path_to_word_list]\n", argv[0]);
@@ -300,7 +304,7 @@ int main(int argc, char **argv) {
 	/*user input loop*/
 	while (fgets(input_buffer, 100, stdin) != NULL) {
 		printf("\n");
-		char *word = sanitizer(input_buffer);
+		word = sanitizer(input_buffer);
 		scrabbler(word_set, word);
 		free(word);
 		printf("\n");
