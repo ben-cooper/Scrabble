@@ -170,7 +170,7 @@ int main(int argc, char **argv) {
 	std::unordered_map<unsigned long int, std::list<std::string>> word_set;
 
 	if (argc == 1) {
-		dict = std::ifstream("/usr/share/dict/words");
+		dict.open("/usr/share/dict/words");
 		if (!dict.is_open()) {
 			std::cerr << "Unix word list not found.  \
 				Please specify your own." << std::endl;
@@ -202,5 +202,6 @@ int main(int argc, char **argv) {
 		word_searcher(letters, word_set);
 		std::cout << std::endl <<  "Letters: ";
 	}
+	dict.close();
 	std::cout << std::endl << "Goodbye." << std::endl;
 }
