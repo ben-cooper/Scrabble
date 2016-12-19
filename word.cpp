@@ -7,19 +7,19 @@
 const int primes[26] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43,
 			47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101};
 
-bool is_upper(int c) {
+inline bool is_upper(int c) {
 	return c >= 65 && c <= 90;
 }
 
-bool is_lower(int c) {
+inline bool is_lower(int c) {
 	return c >= 97 && c <= 122;
 }
 
-bool is_letter(int c) {
+inline bool is_letter(int c) {
 	return is_lower(c) || is_upper(c);
 }
 
-int normalize_letter(int c) {
+inline int normalize_letter(int c) {
 	if (is_lower(c))
 		return c - 97;
 	else
