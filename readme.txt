@@ -1,5 +1,5 @@
 Scrabble Word Finder
-(Written in C for Unix-like systems.)
+(Written in C++ for Unix-like systems.)
 (Will work on Windows as well.)
 
 This program finds words you could make out of a subset of given letters, for English words.
