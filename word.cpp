@@ -31,7 +31,7 @@ class Combo {
 	 std::list<std::array<int,2>> combo;
 	 std::string str;
 	public:
-	 Combo(std::string input) {
+	 explicit Combo(std::string input) {
 		 int val;
 		 int normal;
 		 int bucket[26] = { 0 };
@@ -40,7 +40,7 @@ class Combo {
 		 std::string result;
 		 std::string::iterator it;
 
-		 for (it = input.begin(); it < input.end(); it++) {
+		 for (it = input.begin(); it < input.end(); ++it) {
 			val = (int) *it;
 			if (is_letter(val)) {
 				normal = normalize_letter(val);
@@ -50,7 +50,7 @@ class Combo {
 			}
 		 }
 
-		 for (it = result.begin(); it != result.end(); it++) {
+		 for (it = result.begin(); it != result.end(); ++it) {
 			val = (int) *it;
 			bucket_val = bucket[normalize_letter(val)];
 			element[0] = bucket_val;
@@ -67,7 +67,7 @@ class Combo {
 		 std::string result;
 		 std::list<std::array<int,2>>::iterator it;
 
-		 for (it=combo.begin(); it != combo.end(); it++) {
+		 for (it=combo.begin(); it != combo.end(); ++it) {
 			 for (i=0; i < it->front(); i++) 
 				 result += str[j];
 			 j += 1;
@@ -79,7 +79,7 @@ class Combo {
 	 bool decrement() {
 		 std::list<std::array<int, 2>>::reverse_iterator it;
 
-		 for (it=combo.rbegin(); it != combo.rend(); it++) {
+		 for (it=combo.rbegin(); it != combo.rend(); ++it) {
 			 if (it->front() == 0) {
 				 it->front() = it->back();
 			 } else {
@@ -98,13 +98,13 @@ bool is_anagram(std::string &str1, std::string &str2) {
 		int buckets[26] = { 0 };
 		std::string::iterator it;
 
-		for (it=str1.begin(); it != str1.end(); it++) {
+		for (it=str1.begin(); it != str1.end(); ++it) {
 			val = (int) *it;
 			if (is_letter(val))
 				buckets[normalize_letter(val)] += 1;
 		}
 
-		for (it=str2.begin(); it != str2.end(); it++) {
+		for (it=str2.begin(); it != str2.end(); ++it) {
 			val = (int) *it;
 			if (is_letter(val))
 				buckets[normalize_letter(val)] -= 1;
@@ -121,7 +121,7 @@ unsigned long word_hasher(std::string &str) {
 	std::string::iterator it;
 	int val;
 
-	for (it = str.begin(); it < str.end(); it++) {
+	for (it = str.begin(); it < str.end(); ++it) {
 		val = (int) *it;
 		if (is_letter(val))
 			result *= primes[normalize_letter(val)];
@@ -148,7 +148,7 @@ void word_searcher(std::string &letters, std::unordered_map<unsigned long int,
 		hash = word_hasher(line);
 		if (word_set.find(hash) != word_set.end()) {
 			for (it=word_set[hash].begin();
-					it != word_set[hash].end(); it++) {
+					it != word_set[hash].end(); ++it) {
 				if (is_anagram(line, *it))
 					result.push_front(*it);
 			}
@@ -156,7 +156,7 @@ void word_searcher(std::string &letters, std::unordered_map<unsigned long int,
 	} while (combine.decrement());
 
 	result.sort(compare_length);
-	for (it=result.begin(); it != result.end(); it++) {
+	for (it=result.begin(); it != result.end(); ++it) {
 		std::cout << *it << std::endl;
 	}
 	std::cout << std::endl;
