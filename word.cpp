@@ -178,7 +178,7 @@ int main(int argc, char **argv) {
 			exit(1);
 		}
 	} else if (argc == 2) {
-		dict = std::ifstream(argv[1]);
+		dict.open(argv[1]);
 		if (!dict.is_open()) {
 			std::cerr << "Could not open: " << argv[1] << std::endl;
 			exit(1);
