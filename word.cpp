@@ -4,7 +4,7 @@
 #include <list>
 #include <string>
 #include <array>
-#include "combo.h"
+#include "combo.hpp"
 
 //this is for the hashing function to assign a unique prime number to each
 //letter in the alphabet

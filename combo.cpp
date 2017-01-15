@@ -1,6 +1,6 @@
 #include <list>
 #include <array>
-#include "combo.h"
+#include "combo.hpp"
 
 //for upper-case letters
 bool is_upper(int c) {
