@@ -16,13 +16,13 @@ bool is_anagram(std::string &str1, std::string &str2) {
 		std::string::iterator it;
 
 		for (it=str1.begin(); it != str1.end(); ++it) {
-			val = (int) *it;
+		val = (int) *it;
 			if (is_letter(val))
 				buckets[normalize_letter(val)] += 1;
 		}
 
 		for (it=str2.begin(); it != str2.end(); ++it) {
-			val = (int) *it;
+		val = (int) *it;
 			if (is_letter(val))
 				buckets[normalize_letter(val)] -= 1;
 		}
@@ -39,7 +39,7 @@ unsigned long word_hasher(std::string &str) {
 	int val;
 
 	for (it = str.begin(); it < str.end(); ++it) {
-		val = (int) *it;
+	val = (int) *it;
 		if (is_letter(val))
 			result *= primes[normalize_letter(val)];
 	}
@@ -65,7 +65,7 @@ void word_searcher(std::string &letters, std::unordered_map<unsigned long int,
 		hash = word_hasher(line);
 		if (word_set.find(hash) != word_set.end()) {
 			for (it=word_set[hash].begin();
-					it != word_set[hash].end(); ++it) {
+			it != word_set[hash].end(); ++it) {
 				if (is_anagram(line, *it))
 					result.push_front(*it);
 			}
