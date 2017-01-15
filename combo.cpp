@@ -1,5 +1,3 @@
-#include <list>
-#include <array>
 #include "combo.hpp"
 
 //for upper-case letters

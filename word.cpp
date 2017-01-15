@@ -1,9 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
-#include <list>
-#include <string>
-#include <array>
 #include "combo.hpp"
 
 //this is for the hashing function to assign a unique prime number to each

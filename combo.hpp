@@ -1,6 +1,8 @@
 #ifndef Combo_H
 #define Combo_H
-
+#include <list>
+#include <array>
+#include <string>
 
 //these functions are used to fill the letter buckets
 //that are used for generating subsets and hashes
