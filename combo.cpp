@@ -1,23 +1,8 @@
 #include "combo.hpp"
 
-//for upper-case letters
-bool is_upper(int c) {
-	return c >= 65 && c <= 90;
-}
-
-//for lower-case letters
-bool is_lower(int c) {
-	return c >= 97 && c <= 122;
-}
-
-bool is_letter(int c) {
-	return is_lower(c) || is_upper(c);
-}
-
-
 //converts the ascii value into a number between 0 and 25
 int normalize_letter(int c) {
-	if (is_lower(c))
+	if (islower(c))
 		return c - 97;
 	else
 		return c - 65;
@@ -36,7 +21,7 @@ Combo::Combo(std::string input) {
 	//string that has duplicate letters filtered out
 	for (it = input.begin(); it < input.end(); ++it) {
 		val = (int) *it;
-		if (is_letter(val)) {
+		if (isalpha(val)) {
 			normal = normalize_letter(val);
 			if (bucket[normal] == 0)
 				result += *it;
