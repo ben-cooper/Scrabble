@@ -17,14 +17,14 @@ bool is_anagram(std::string &str1, std::string &str2) {
 		//counting the number of occurrences in each letter in the
 		//first string
 		for (it=str1.begin(); it != str1.end(); ++it) {
-		val = (int) *it;
+			val = (int) *it;
 			if (isalpha(val))
 				buckets[normalize_letter(val)] += 1;
 		}
 		
 		//subtracting the other strings letter from the letter counter
 		for (it=str2.begin(); it != str2.end(); ++it) {
-		val = (int) *it;
+			val = (int) *it;
 			if (isalpha(val))
 				buckets[normalize_letter(val)] -= 1;
 		}
@@ -45,7 +45,7 @@ unsigned long word_hasher(std::string &str) {
 	//looks up the prime number associated with each letter and
 	//multiplying it to the running product
 	for (it = str.begin(); it < str.end(); ++it) {
-	val = (int) *it;
+		val = (int) *it;
 		if (isalpha(val))
 			result *= primes[normalize_letter(val)];
 	}
