@@ -11,6 +11,7 @@ struct combo {
 	int *reset;
 	char *str;
 	int length;
+	int max;
 };
 
 int normalize_letter(int c) {
@@ -48,8 +49,8 @@ struct combo *create_combo_array(char const *letters) {
 
 
 	/* creating resulting combo array */
-	combo = (int *) emalloc(next * sizeof(int));
-	reset = (int *) emalloc(next * sizeof(int));
+	combo = (int *) ecalloc(next, sizeof(int));
+	reset = (int *) ecalloc(next, sizeof(int));
 
 
 	next = 0;
@@ -65,6 +66,7 @@ struct combo *create_combo_array(char const *letters) {
 	result->reset = reset;
 	result->length = next;
 	result->str = str;
+	result->max = strlen(letters);
 
 	return result;
 }
@@ -85,9 +87,9 @@ char *sanitizer(char const *word) {
 	int length = strlen(word);
 	int current = 0;
 	int i;
-	char *result = (char *) emalloc(length);
+	char *result = (char *) emalloc(length + 1);
 
-	for (i=0; i < length - 1; i++) {
+	for (i=0; i < length; i++) {
 		if (isalpha(word[i])) {
 			result[current] = word[i];
 			current++;
@@ -175,7 +177,7 @@ char *word_subset(struct combo *combination) {
 	int current = 0;
 	char *result;
 
-	result = (char *) emalloc(sizeof(int) * combination->length+1);
+	result = (char *) emalloc(sizeof(int) * combination->max+1);
 
 
 	for (i=0; i < combination->length; i++)  {
