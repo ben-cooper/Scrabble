@@ -49,8 +49,8 @@ struct combo *create_combo_array(char const *letters) {
 
 
 	/* creating resulting combo array */
-	combo = (int *) ecalloc(next, sizeof(int));
-	reset = (int *) ecalloc(next, sizeof(int));
+	combo = (int *) emalloc(next * sizeof(int));
+	reset = (int *) emalloc(next * sizeof(int));
 
 
 	next = 0;
