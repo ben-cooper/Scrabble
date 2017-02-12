@@ -11,7 +11,7 @@ struct combo {
 	int *reset;
 	char *str;
 	int length;
-	int max;
+	size_t max;
 };
 
 int normalize_letter(int c) {
@@ -22,8 +22,10 @@ int normalize_letter(int c) {
 }
 
 void fill_buckets(char const *str, int *bucket) {
-	unsigned int index;
-	for (index=0; index < strlen(str); index++) {
+	size_t index;
+	size_t length = strlen(str);
+
+	for (index=0; index < length; index++) {
 			bucket[normalize_letter(str[index])] += 1;
 	}
 }
@@ -71,12 +73,13 @@ struct combo *create_combo_array(char const *letters) {
 	return result;
 }
 
-unsigned long word_hasher(char const *str) {
-	unsigned long result = 1;
-	unsigned int index;
+size_t word_hasher(char const *str) {
+	size_t result = 1;
+	size_t index;
+	size_t length = strlen(str);
 
 	/*creating hash*/
-	for (index=0; index < strlen(str); index++) {
+	for (index=0; index < length; index++) {
 			result *= primes[normalize_letter(str[index])];
 	}
 	return result;
@@ -84,14 +87,14 @@ unsigned long word_hasher(char const *str) {
 }
 
 char *sanitizer(char const *word) {
-	int length = strlen(word);
-	int current = 0;
-	int i;
+	size_t length = strlen(word);
+	size_t current = 0;
+	size_t index;
 	char *result = (char *) emalloc(length + 1);
 
-	for (i=0; i < length; i++) {
-		if (isalpha(word[i])) {
-			result[current] = word[i];
+	for (index=0; index < length; index++) {
+		if (isalpha(word[index])) {
+			result[current] = word[index];
 			current++;
 		}
 	}
@@ -153,7 +156,7 @@ int word_searcher(hashtable *word_set, char *word, hashtable *output) {
 	char *copy;
 
 	/*finding word with the same hashes*/
-	if ((buffer = word_set->table[word_hasher(word) % (word_set->size)]) != NULL) {
+	if ((buffer = get_bucket(word_set, word_hasher(word))) != NULL) {
 		while (buffer != NULL) {
 			/*seeing if words are actually anagrams of each 
 			 * other*/
