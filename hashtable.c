@@ -34,6 +34,10 @@ void insert(hashtable *table, size_t hash, char *str) {
 	table->table[hash % (table->size)] = new_node;
 }
 
+llist *get_bucket(hashtable *table, size_t hash) {
+		return table->table[hash % table->size];
+}
+
 void destroy_list(llist *list) {
 		llist *temp;
 		while (list != NULL) {

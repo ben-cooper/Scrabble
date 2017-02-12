@@ -17,6 +17,7 @@ extern void *emalloc(size_t size);
 extern void *ecalloc(size_t nmemb, size_t size);
 extern hashtable *init_table(size_t size);
 extern void insert(hashtable *table, size_t hash, char *str);
+extern llist *get_bucket(hashtable *table, size_t hash);
 extern void destroy_list(llist *list);
 extern void destroy_table(hashtable *table);
 extern void print_list(llist const *list);
