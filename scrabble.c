@@ -125,7 +125,7 @@ hashtable *initialize(FILE *list) {
 		insert(word_set, word_hasher(str), str);
 	}
 
-	printf("Number of words: %zu\n", lines);
+	printf("Number of words: %lu\n", (unsigned long) lines);
 	return word_set;
 }
 
