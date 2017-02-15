@@ -245,8 +245,8 @@ int main(int argc, char **argv) {
 	if (argc == 1) {
 		if ((list = fopen("/usr/share/dict/words", "r")) == NULL) {
 			perror("fopen");
-			fprintf(stderr, "Unix word list not found.  Please \
-				give path to word list as argument.\n");
+			fprintf(stderr, "Unix word list not found.  Please "
+					"give path to word list as argument.\n");
 			exit(1);
 		}
 	} else if ((list = fopen(argv[1], "r")) == NULL) {
