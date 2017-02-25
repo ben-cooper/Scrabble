@@ -34,10 +34,11 @@ struct combo *create_combo_array(char const *letters) {
 	int bucket[26] = { 0 };
 	int *combo;
 	int *reset;
-	struct combo *result = (struct combo *) emalloc(sizeof(struct combo));
 	unsigned int next = 0;
 	unsigned int index;
-	char *str = (char *) ecalloc(strlen(letters) + 1, sizeof(char));
+	size_t len = strlen(letters);
+	char *str = (char *) ecalloc(len + 1, sizeof(char));
+	struct combo *result = (struct combo *) emalloc(sizeof(struct combo));
 
 	fill_buckets(letters, bucket);
 
@@ -68,7 +69,7 @@ struct combo *create_combo_array(char const *letters) {
 	result->reset = reset;
 	result->length = next;
 	result->str = str;
-	result->max = strlen(letters);
+	result->max = len;
 
 	return result;
 }
