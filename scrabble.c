@@ -15,10 +15,10 @@ struct combo {
 };
 
 int normalize_letter(int c) {
-		if (islower(c))
-				return c - 97;
-		else
-				return c - 65;
+	if (islower(c))
+		return c - 97;
+	else
+		return c - 65;
 }
 
 void fill_buckets(char const *str, int *bucket) {
@@ -26,7 +26,7 @@ void fill_buckets(char const *str, int *bucket) {
 	size_t length = strlen(str);
 
 	for (index=0; index < length; index++) {
-			bucket[normalize_letter(str[index])] += 1;
+		bucket[normalize_letter(str[index])] += 1;
 	}
 }
 
@@ -81,7 +81,7 @@ size_t word_hasher(char const *str) {
 
 	/*creating hash*/
 	for (index=0; index < length; index++) {
-			result *= primes[normalize_letter(str[index])];
+		result *= primes[normalize_letter(str[index])];
 	}
 	return result;
 

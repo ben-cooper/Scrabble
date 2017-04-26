@@ -4,8 +4,8 @@
 #include <stddef.h>
 
 typedef struct llist {
-		char *data;
-		struct llist *next;
+	char *data;
+	struct llist *next;
 } llist;
 
 typedef struct hashtable {
