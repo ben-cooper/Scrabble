@@ -117,6 +117,7 @@ hashtable *initialize(FILE *list) {
 	/* if empty file */
 	if (lines == 0) {
 		fprintf(stderr, "Initialization failed! Empty File.\n");
+		fclose(list);
 		exit(1);
 	}
 
