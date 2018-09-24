@@ -3,7 +3,7 @@
 #include "hashtable.h"
 
 /*list of primes for the hashing function*/
-const int primes[26] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43,
+static const int primes[26] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43,
 			47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101};
 
 struct combo {
@@ -14,14 +14,14 @@ struct combo {
 	size_t max;
 };
 
-int normalize_letter(int c) {
+static unsigned char normalize_letter(unsigned char c) {
 	if (islower(c))
 		return c - 97;
 	else
 		return c - 65;
 }
 
-void fill_buckets(char const *str, int *bucket) {
+static void fill_buckets(char const *str, int *bucket) {
 	size_t index;
 	size_t length = strlen(str);
 
@@ -30,8 +30,8 @@ void fill_buckets(char const *str, int *bucket) {
 	}
 }
 
-struct combo *create_combo_array(char const *letters) {
-	int bucket[26] = { 0 };
+static struct combo *create_combo_array(char const *letters) {
+	int bucket[26];
 	int *combo;
 	int *reset;
 	unsigned int next = 0;
@@ -40,6 +40,7 @@ struct combo *create_combo_array(char const *letters) {
 	char *str = (char *) ecalloc(len + 1, sizeof(char));
 	struct combo *result = (struct combo *) emalloc(sizeof(struct combo));
 
+	memset(bucket, 0, 26 * sizeof(int));
 	fill_buckets(letters, bucket);
 
 	/* removing duplicate letters from input */
@@ -74,7 +75,7 @@ struct combo *create_combo_array(char const *letters) {
 	return result;
 }
 
-size_t word_hasher(char const *str) {
+static size_t word_hasher(char const *str) {
 	size_t result = 1;
 	size_t index;
 	size_t length = strlen(str);
@@ -87,7 +88,7 @@ size_t word_hasher(char const *str) {
 
 }
 
-char *sanitizer(char const *word) {
+static char *sanitizer(char const *word) {
 	size_t length = strlen(word);
 	size_t current = 0;
 	size_t index;
@@ -103,22 +104,21 @@ char *sanitizer(char const *word) {
 	return result;
 }
 
-hashtable *initialize(FILE *list) {
+static hashtable *initialize(FILE *list) {
 	hashtable *word_set;
 	char word[100];
 	char *str;
 	size_t lines = 0;
-	
+
 	/*counting number of words in dictionary*/
 	while ((fgets(word, 100, list) != NULL)) {
 		lines += 1;
 	}
-	
+
 	/* if empty file */
 	if (lines == 0) {
 		fprintf(stderr, "Initialization failed! Empty File.\n");
-		fclose(list);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	rewind(list);
@@ -134,11 +134,13 @@ hashtable *initialize(FILE *list) {
 	return word_set;
 }
 
-int is_anagram(char const *str, char const *other) {
+static int is_anagram(char const *str, char const *other) {
 	/*creating buckets to bucket sort (array of zeroes)*/
-	int bucket[26] = { 0 };
+	int bucket[26];
 	int other_bucket[26] = { 0 };
 	unsigned int index;
+
+	memset(bucket, 0, 26 * sizeof(int));
 
 	fill_buckets(str, bucket);
 	fill_buckets(other, other_bucket);
@@ -151,7 +153,7 @@ int is_anagram(char const *str, char const *other) {
 	return 1;
 }
 
-int word_searcher(hashtable *word_set, char *word, hashtable *output) {
+static int word_searcher(hashtable *word_set, char *word, hashtable *output) {
 	/*output is to sort by length*/
 	llist *buffer;
 	int result = 0;
@@ -160,7 +162,7 @@ int word_searcher(hashtable *word_set, char *word, hashtable *output) {
 	/*finding word with the same hashes*/
 	if ((buffer = get_bucket(word_set, word_hasher(word))) != NULL) {
 		while (buffer != NULL) {
-			/*seeing if words are actually anagrams of each 
+			/*seeing if words are actually anagrams of each
 			 * other*/
 			if (is_anagram(buffer->data, word) == 1) {
 				copy = (char *) emalloc (strlen(buffer->data) + 1);
@@ -176,7 +178,7 @@ int word_searcher(hashtable *word_set, char *word, hashtable *output) {
 	return result;
 }
 
-char *word_subset(struct combo *combination) {
+static char *word_subset(struct combo *combination) {
 	int i;
 	int j;
 	int current = 0;
@@ -195,7 +197,7 @@ char *word_subset(struct combo *combination) {
 	return result;
 }
 
-int decrement(struct combo *combination) {
+static int decrement(struct combo *combination) {
 	int i;
 	int ret=1;
 	for (i=combination->length-1; i >= 0; i--) {
@@ -210,7 +212,7 @@ int decrement(struct combo *combination) {
 	return ret;
 }
 
-void scrabbler(hashtable *word_set, char *letters) {
+static void scrabbler(hashtable *word_set, char *letters) {
 	struct combo *combination;
 	int stop=0;
 	char *word;
@@ -241,7 +243,7 @@ int main(int argc, char **argv) {
 
 	if (argc > 2) {
 		fprintf(stderr, "usage: %s [path_to_word_list]\n", argv[0]);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	if (argc == 1) {
@@ -249,11 +251,11 @@ int main(int argc, char **argv) {
 			perror("fopen");
 			fprintf(stderr, "Unix word list not found.  Please "
 					"give path to word list as argument.\n");
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
 	} else if ((list = fopen(argv[1], "r")) == NULL) {
 		perror("fopen");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	/*getting word set*/
